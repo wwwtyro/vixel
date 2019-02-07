@@ -6,9 +6,7 @@ A WebGL path tracing voxel renderer built with [regl](https://github.com/regl-pr
 
 ![vixel screenshot](media/dof.png)
 
-<p align="center">
-  ![vixel screenshot](media/bulb.png)
-</p>
+![vixel screenshot](media/bulb.png)
 
 ## Example
 
@@ -48,9 +46,7 @@ vixel.display();
 
 The code in the example above will result in the following image:
 
-<p align="center">
-  ![vixel screenshot](media/example.png)
-</p>
+![vixel screenshot](media/example.png)
 
 ## Installation
 
