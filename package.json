@@ -1,0 +1,29 @@
+{
+  "name": "vixel",
+  "version": "1.0.0",
+  "description": "A WebGL voxel path tracer",
+  "main": "index.js",
+  "scripts": {
+    "start": "budo -d docs docs/index.js:docs/bundle.js --live -- -t glslify"
+  },
+  "keywords": [
+    "webgl",
+    "voxel",
+    "path tracing"
+  ],
+  "author": "Rye Terrell",
+  "license": "Unlicense",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wwwtyro/vixel.git"
+  },
+  "dependencies": {
+    "gl-matrix": "^3.0.0",
+    "regl": "^1.3.11",
+    "regl-atmosphere-envmap": "^1.0.1"
+  },
+  "devDependencies": {
+    "budo": "^11.6.0",
+    "glslify": "^7.0.0"
+  }
+}
