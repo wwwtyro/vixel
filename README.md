@@ -6,8 +6,6 @@ A WebGL path tracing voxel renderer built with [regl](https://github.com/regl-pr
 
 ![vixel screenshot](media/dof.png)
 
-![vixel screenshot](media/bulb.png)
-
 <p align="center">
   <img src=https://github.com/wwwtyro/vixel/blob/master/media/bulb.png>
 </p>
