@@ -8,6 +8,10 @@ A WebGL path tracing voxel renderer built with [regl](https://github.com/regl-pr
 
 ![vixel screenshot](media/bulb.png)
 
+<p align="center">
+  <img src=https://github.com/wwwtyro/vixel/blob/master/media/bulb.png>
+</p>
+
 ## Example
 
 ```js
@@ -46,7 +50,9 @@ vixel.display();
 
 The code in the example above will result in the following image:
 
-![vixel screenshot](media/example.png)
+<p align="center">
+  <img src=https://github.com/wwwtyro/vixel/blob/master/media/example.png>
+</p>
 
 ## Installation
 
