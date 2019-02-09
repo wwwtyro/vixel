@@ -1,6 +1,6 @@
 {
   "name": "vixel",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A WebGL voxel path tracer",
   "main": "index.js",
   "scripts": {
@@ -12,6 +12,11 @@
     "path tracing"
   ],
   "author": "Rye Terrell",
+  "browserify": {
+    "transform": [
+      "glslify"
+    ]
+  },
   "license": "Unlicense",
   "repository": {
     "type": "git",
