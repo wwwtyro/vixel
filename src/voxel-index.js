@@ -17,10 +17,17 @@ module.exports = class VoxelIndex {
     this.keys = new Map();
   }
 
+  key(v) {
+    const vals = [v.red, v.green, v.blue, v.rough, v.metal, v.emit, v.transparent, v.refract];
+    let h = '';
+    for (let i = 0; i < vals.length; i++) {
+      h += String.fromCharCode(vals[i]);
+    }
+    return h
+  }
+
   set(v) {
-    const h = `${v.red} ${v.green} ${v.blue} ${v.rough} ${v.metal} ${v.emit} ${
-      v.transparent
-    } ${v.refract}`;
+    const h = this.key(v)
     if (!this.keys.has(h)) {
       // It's cool that we're skipping the first two indices, because those will be a shortcut for air and ground.
       this.x++;
