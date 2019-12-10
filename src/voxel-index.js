@@ -17,7 +17,7 @@ module.exports = class VoxelIndex {
     this.keys = {};
   }
 
-  get(v) {
+  set(v) {
     const h = `${v.red} ${v.green} ${v.blue} ${v.rough} ${v.metal} ${v.emit} ${
       v.transparent
     } ${v.refract}`;
@@ -42,6 +42,11 @@ module.exports = class VoxelIndex {
       this.aRMET[i * 4 + 3] = v.transparent;
       this.aRi[i * 4 + 0] = v.refract;
     }
+
+    return h;
+  }
+
+  get(h) {
     return this.keys[h];
   }
 };

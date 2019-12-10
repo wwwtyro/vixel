@@ -41,10 +41,7 @@ module.exports = class Stage {
     if (x < 0 || x >= this.width) throw new Error("Vixel: set out of bounds.");
     if (y < 0 || y >= this.height) throw new Error("Vixel: set out of bounds.");
     if (z < 0 || z >= this.depth) throw new Error("Vixel: set out of bounds.");
-    this.data.set(this.key(x, y, z), {
-      x,
-      y,
-      z,
+    const vKey = this.vIndex.set({
       red: Math.round(red * 255),
       green: Math.round(green * 255),
       blue: Math.round(blue * 255),
@@ -54,6 +51,7 @@ module.exports = class Stage {
       transparent,
       refract
     });
+    this.data.set(this.key(x, y, z), { x, y, z, vKey });
   }
 
   unset(x, y, z) {
@@ -81,7 +79,7 @@ module.exports = class Stage {
     const aIndex = new Uint8Array(this.textureSize * this.textureSize * 2);
     aIndex.fill(0);
     for (let v of this.data.values()) {
-      const vi = this.vIndex.get(v);
+      const vi = this.vIndex.get(v.vKey);
       const ai = v.y * this.width * this.depth + v.z * this.width + v.x;
       aIndex[ai * 2 + 0] = vi[0];
       aIndex[ai * 2 + 1] = vi[1];
