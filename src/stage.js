@@ -1,7 +1,5 @@
 "use strict";
 
-const { vec3 } = require("gl-matrix");
-
 const VoxelIndex = require("./voxel-index");
 
 module.exports = class Stage {
@@ -10,16 +8,19 @@ module.exports = class Stage {
     this.width = width;
     this.height = height;
     this.depth = depth;
-    this.data = {};
+    this.data = new Map();
     this.vIndex = new VoxelIndex();
     this.tIndex = regl.texture();
     this.tRGB = regl.texture();
     this.tRMET = regl.texture();
     this.tRi = regl.texture();
+
+    this.keyYFactor = this.width * this.height;
+    this.keyXFactor = this.keyYFactor * this.keyYFactor;
   }
 
   key(x, y, z) {
-    return `${x} ${y} ${z}`;
+    return x * this.keyXFactor + y * this.keyYFactor + z;
   }
 
   set(
@@ -40,7 +41,7 @@ module.exports = class Stage {
     if (x < 0 || x >= this.width) throw new Error("Vixel: set out of bounds.");
     if (y < 0 || y >= this.height) throw new Error("Vixel: set out of bounds.");
     if (z < 0 || z >= this.depth) throw new Error("Vixel: set out of bounds.");
-    this.data[this.key(x, y, z)] = {
+    this.data.set(this.key(x, y, z), {
       x,
       y,
       z,
@@ -52,7 +53,7 @@ module.exports = class Stage {
       emit,
       transparent,
       refract
-    };
+    });
   }
 
   unset(x, y, z) {
@@ -61,7 +62,7 @@ module.exports = class Stage {
   }
 
   get(x, y, z) {
-    return this.data[this.key(x, y, z)];
+    return this.data.get(this.key(x, y, z));
   }
 
   clear() {
@@ -79,7 +80,7 @@ module.exports = class Stage {
     }
     const aIndex = new Uint8Array(this.textureSize * this.textureSize * 2);
     aIndex.fill(0);
-    for (let [_, v] of Object.entries(this.data)) {
+    for (let v of this.data.values()) {
       const vi = this.vIndex.get(v);
       const ai = v.y * this.width * this.depth + v.z * this.width + v.x;
       aIndex[ai * 2 + 0] = vi[0];
@@ -127,7 +128,7 @@ module.exports = class Stage {
     out.emit = [];
     out.transparent = [];
     out.refract = [];
-    for (let [_, v] of Object.entries(this.data)) {
+    for (let v of this.data.values()) {
       out.xyz.push(v.x, v.y, v.z);
       out.rgb.push(v.red, v.green, v.blue);
       out.rough.push(+v.rough.toFixed(3));
