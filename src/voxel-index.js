@@ -14,14 +14,14 @@ module.exports = class VoxelIndex {
     this.aRi.fill(0);
     this.x = 1;
     this.y = 0;
-    this.keys = {};
+    this.keys = new Map();
   }
 
   set(v) {
     const h = `${v.red} ${v.green} ${v.blue} ${v.rough} ${v.metal} ${v.emit} ${
       v.transparent
     } ${v.refract}`;
-    if (this.keys[h] === undefined) {
+    if (!this.keys.has(h)) {
       // It's cool that we're skipping the first two indices, because those will be a shortcut for air and ground.
       this.x++;
       if (this.x > 255) {
@@ -31,7 +31,7 @@ module.exports = class VoxelIndex {
           throw new Error("Exceeded voxel type limit of 65536");
         }
       }
-      this.keys[h] = [this.x, this.y];
+      this.keys.set(h, [this.x, this.y]);
       const i = this.y * 256 + this.x;
       this.aRGB[i * 3 + 0] = v.red;
       this.aRGB[i * 3 + 1] = v.green;
@@ -47,6 +47,6 @@ module.exports = class VoxelIndex {
   }
 
   get(h) {
-    return this.keys[h];
+    return this.keys.get(h);
   }
 };
