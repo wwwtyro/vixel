@@ -14,14 +14,21 @@ module.exports = class VoxelIndex {
     this.aRi.fill(0);
     this.x = 1;
     this.y = 0;
-    this.keys = {};
+    this.keys = new Map();
   }
 
-  get(v) {
-    const h = `${v.red} ${v.green} ${v.blue} ${v.rough} ${v.metal} ${v.emit} ${
-      v.transparent
-    } ${v.refract}`;
-    if (this.keys[h] === undefined) {
+  key(v) {
+    const vals = [v.red, v.green, v.blue, v.rough, v.metal, v.emit, v.transparent, v.refract];
+    let h = '';
+    for (let i = 0; i < vals.length; i++) {
+      h += String.fromCharCode(vals[i]);
+    }
+    return h
+  }
+
+  set(v) {
+    const h = this.key(v)
+    if (!this.keys.has(h)) {
       // It's cool that we're skipping the first two indices, because those will be a shortcut for air and ground.
       this.x++;
       if (this.x > 255) {
@@ -31,7 +38,7 @@ module.exports = class VoxelIndex {
           throw new Error("Exceeded voxel type limit of 65536");
         }
       }
-      this.keys[h] = [this.x, this.y];
+      this.keys.set(h, [this.x, this.y]);
       const i = this.y * 256 + this.x;
       this.aRGB[i * 3 + 0] = v.red;
       this.aRGB[i * 3 + 1] = v.green;
@@ -42,6 +49,11 @@ module.exports = class VoxelIndex {
       this.aRMET[i * 4 + 3] = v.transparent;
       this.aRi[i * 4 + 0] = v.refract;
     }
-    return this.keys[h];
+
+    return h;
+  }
+
+  get(h) {
+    return this.keys.get(h);
   }
 };
