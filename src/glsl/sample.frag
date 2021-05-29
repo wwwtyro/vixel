@@ -1,5 +1,5 @@
 precision highp float;
-uniform sampler2D tRGB, tRMET, tRi, tIndex, t2Sphere, t3Sphere, tUniform2, tUniform1, source;
+uniform highp sampler2D tRGB, tRMET, tRi, tIndex, t2Sphere, t3Sphere, tUniform2, tUniform1, source;
 uniform samplerCube tSky;
 uniform mat4 invpv;
 uniform vec3 eye, bounds, lightPosition, groundColor;
@@ -21,7 +21,6 @@ vec2 randUniform2(inout vec2 randOffset) {
   return r;
 }
 
-
 vec3 rand2Sphere(inout vec2 randOffset) {
   vec3 r = texture2D(t2Sphere, randOffset + tOffset).xyz;
   randOffset += r.xy;
@@ -35,7 +34,13 @@ vec3 rand3Sphere(inout vec2 randOffset) {
 }
 
 bool inBounds(vec3 p) {
-  return all(greaterThanEqual(p, vec3(0.0))) && all(lessThan(p, bounds));
+  if (p.x < 0.0 || p.y < 0.0 || p.z < 0.0) {
+    return false;
+  }
+  if (p.x >= bounds.x || p.y >= bounds.y || p.z >= bounds.z) {
+    return false;
+  }
+  return true;
 }
 
 bool rayAABB(vec3 origin, vec3 direction, vec3 bMin, vec3 bMax, out float t0) {

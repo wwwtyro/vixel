@@ -8,12 +8,35 @@ const PingPong = require("./pingpong");
 module.exports = function Renderer(canvas) {
   const regl = require("regl")({
     canvas: canvas,
-    extensions: ["OES_texture_float"],
+    optionalExtensions: [
+      "OES_texture_float",
+      "OES_texture_half_float",
+      "WEBGL_color_buffer_float",
+      "EXT_color_buffer_half_float",
+    ],
     attributes: {
       antialias: false,
-      preserveDrawingBuffer: true
-    }
+      preserveDrawingBuffer: true,
+    },
   });
+
+  const colorType = (() => {
+    if (
+      regl.hasExtension("OES_texture_float") &&
+      regl.hasExtension("WEBGL_color_buffer_float")
+    ) {
+      return "float";
+    }
+    if (
+      regl.hasExtension("OES_texture_half_float") ||
+      regl.hasExtension("EXT_color_buffer_half_float")
+    ) {
+      return "half float";
+    }
+    throw new Error(
+      "Vixel requires the capability to render to floating point textures."
+    );
+  })();
 
   const sunDistance = 149600000000;
   let sunPosition = vec3.scale(
@@ -25,20 +48,20 @@ module.exports = function Renderer(canvas) {
   const renderAtmosphere = createAtmosphereRenderer(regl);
   const skyMap = renderAtmosphere({
     sunDirection: vec3.normalize([], sunPosition),
-    resolution: 1024
+    resolution: 1024,
   });
 
   const pingpong = PingPong(regl, {
     width: canvas.width,
     height: canvas.height,
-    colorType: "float"
+    colorType,
   });
 
   const ndcBox = [-1, -1, 1, -1, 1, 1, -1, -1, 1, 1, -1, 1];
 
   const tRandSize = 1024;
 
-  const t2Sphere = (function() {
+  const t2Sphere = (function () {
     const data = new Float32Array(tRandSize * tRandSize * 3);
     for (let i = 0; i < tRandSize * tRandSize; i++) {
       const r = vec3.random([]);
@@ -52,11 +75,11 @@ module.exports = function Renderer(canvas) {
       format: "rgb",
       type: "float",
       data: data,
-      wrap: "repeat"
+      wrap: "repeat",
     });
   })();
 
-  const t3Sphere = (function() {
+  const t3Sphere = (function () {
     const data = new Float32Array(tRandSize * tRandSize * 3);
     for (let i = 0; i < tRandSize * tRandSize; i++) {
       const r = vec3.random([], Math.random());
@@ -70,11 +93,11 @@ module.exports = function Renderer(canvas) {
       format: "rgb",
       type: "float",
       data: data,
-      wrap: "repeat"
+      wrap: "repeat",
     });
   })();
 
-  const tUniform2 = (function() {
+  const tUniform2 = (function () {
     const data = new Float32Array(tRandSize * tRandSize * 2);
     for (let i = 0; i < tRandSize * tRandSize; i++) {
       data[i * 2 + 0] = Math.random();
@@ -86,11 +109,11 @@ module.exports = function Renderer(canvas) {
       format: "luminance alpha",
       type: "float",
       data: data,
-      wrap: "repeat"
+      wrap: "repeat",
     });
   })();
 
-  const tUniform1 = (function() {
+  const tUniform1 = (function () {
     const data = new Float32Array(tRandSize * tRandSize * 1);
     for (let i = 0; i < tRandSize * tRandSize; i++) {
       data[i] = Math.random();
@@ -101,7 +124,7 @@ module.exports = function Renderer(canvas) {
       format: "luminance",
       type: "float",
       data: data,
-      wrap: "repeat"
+      wrap: "repeat",
     });
   })();
 
@@ -109,7 +132,7 @@ module.exports = function Renderer(canvas) {
     vert: glsl.file("./glsl/sample.vert"),
     frag: glsl.file("./glsl/sample.frag"),
     attributes: {
-      position: ndcBox
+      position: ndcBox,
     },
     uniforms: {
       source: regl.prop("source"),
@@ -137,35 +160,35 @@ module.exports = function Renderer(canvas) {
       groundColor: regl.prop("groundColor"),
       groundRoughness: regl.prop("groundRoughness"),
       groundMetalness: regl.prop("groundMetalness"),
-      bounds: regl.prop("bounds")
+      bounds: regl.prop("bounds"),
     },
     depth: {
       enable: false,
-      mask: false
+      mask: false,
     },
     viewport: regl.prop("viewport"),
     framebuffer: regl.prop("destination"),
-    count: 6
+    count: 6,
   });
 
   const cmdDisplay = regl({
     vert: glsl.file("./glsl/display.vert"),
     frag: glsl.file("./glsl/display.frag"),
     attributes: {
-      position: ndcBox
+      position: ndcBox,
     },
     uniforms: {
       source: regl.prop("source"),
       fraction: regl.prop("fraction"),
       tUniform1: tUniform1,
-      tUniform1Res: [tUniform1.width, tUniform1.height]
+      tUniform1Res: [tUniform1.width, tUniform1.height],
     },
     depth: {
       enable: false,
-      mask: false
+      mask: false,
     },
     viewport: regl.prop("viewport"),
-    count: 6
+    count: 6,
   });
 
   function calculateSunPosition(time, azimuth) {
@@ -173,7 +196,7 @@ module.exports = function Renderer(canvas) {
     return [
       sunDistance * Math.cos(azimuth) * Math.cos(theta),
       sunDistance * Math.sin(theta),
-      sunDistance * Math.sin(azimuth) * Math.cos(theta)
+      sunDistance * Math.sin(azimuth) * Math.cos(theta),
     ];
   }
 
@@ -185,7 +208,7 @@ module.exports = function Renderer(canvas) {
       sunPosition = sp;
       renderAtmosphere({
         sunDirection: vec3.normalize([], sunPosition),
-        cubeFBO: skyMap
+        cubeFBO: skyMap,
       });
     }
     for (let i = 0; i < opts.count; i++) {
@@ -210,7 +233,7 @@ module.exports = function Renderer(canvas) {
         dofMag: opts.dofMag,
         source: pingpong.ping(),
         destination: pingpong.pong(),
-        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height }
+        viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
       });
       pingpong.swap();
       sampleCount++;
@@ -220,7 +243,7 @@ module.exports = function Renderer(canvas) {
   function display() {
     cmdDisplay({
       source: pingpong.ping(),
-      viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height }
+      viewport: { x: 0, y: 0, width: canvas.width, height: canvas.height },
     });
   }
 
@@ -232,16 +255,16 @@ module.exports = function Renderer(canvas) {
       pingpong.ping()({
         width: canvas.width,
         height: canvas.height,
-        colorType: "float"
+        colorType,
       });
       pingpong.pong()({
         width: canvas.width,
         height: canvas.height,
-        colorType: "float"
+        colorType,
       });
     }
-    regl.clear({ color: [0, 0, 0, 0], framebuffer: pingpong.ping() });
-    regl.clear({ color: [0, 0, 0, 0], framebuffer: pingpong.pong() });
+    regl.clear({ color: [0, 0, 0, 1], framebuffer: pingpong.ping() });
+    regl.clear({ color: [0, 0, 0, 1], framebuffer: pingpong.pong() });
     sampleCount = 0;
   }
 
@@ -250,8 +273,8 @@ module.exports = function Renderer(canvas) {
     sample: sample,
     display: display,
     reset: reset,
-    sampleCount: function() {
+    sampleCount: function () {
       return sampleCount;
-    }
+    },
   };
 };

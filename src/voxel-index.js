@@ -18,9 +18,7 @@ module.exports = class VoxelIndex {
   }
 
   get(v) {
-    const h = `${v.red} ${v.green} ${v.blue} ${v.rough} ${v.metal} ${v.emit} ${
-      v.transparent
-    } ${v.refract}`;
+    const h = `${v.red} ${v.green} ${v.blue} ${v.rough} ${v.metal} ${v.emit} ${v.transparent} ${v.refract}`;
     if (this.keys[h] === undefined) {
       // It's cool that we're skipping the first two indices, because those will be a shortcut for air and ground.
       this.x++;

@@ -34,7 +34,7 @@ module.exports = class Stage {
       metal = 0,
       emit = 0,
       transparent = 0,
-      refract = 1
+      refract = 1,
     } = {}
   ) {
     if (x < 0 || x >= this.width) throw new Error("Vixel: set out of bounds.");
@@ -51,7 +51,7 @@ module.exports = class Stage {
       metal,
       emit,
       transparent,
-      refract
+      refract,
     };
   }
 
@@ -89,33 +89,33 @@ module.exports = class Stage {
       width: this.textureSize,
       height: this.textureSize,
       format: "luminance alpha",
-      data: aIndex
+      data: aIndex,
     });
     this.tRGB({
       width: 256,
       height: 256,
       format: "rgb",
-      data: this.vIndex.aRGB
+      data: this.vIndex.aRGB,
     });
     this.tRMET({
       width: 256,
       height: 256,
       format: "rgba",
       type: "float",
-      data: this.vIndex.aRMET
+      data: this.vIndex.aRMET,
     });
     this.tRi({
       width: 256,
       height: 256,
       format: "rgba",
       type: "float",
-      data: this.vIndex.aRi
+      data: this.vIndex.aRi,
     });
   }
 
   serialize() {
     const out = {
-      version: 0
+      version: 0,
     };
     out.width = this.width;
     out.height = this.height;
@@ -153,7 +153,7 @@ module.exports = class Stage {
         metal: d.metal[i],
         emit: d.emit[i],
         transparent: d.transparent[i],
-        refract: d.refract[i]
+        refract: d.refract[i],
       });
     }
   }
