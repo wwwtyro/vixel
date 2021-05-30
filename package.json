@@ -1,6 +1,6 @@
 {
   "name": "vixel",
-  "version": "1.0.5",
+  "version": "1.0.8",
   "description": "A WebGL voxel path tracer",
   "main": "./lib/bundle.js",
   "scripts": {
@@ -26,10 +26,10 @@
   "dependencies": {
     "gl-matrix": "^3.3.0",
     "regl": "^1.7.0",
-    "regl-atmosphere-envmap": "^1.0.5"
+    "regl-atmosphere-envmap": "^1.0.5",
+    "glslify": "^7.1.1"
   },
   "devDependencies": {
-    "budo": "^11.6.4",
-    "glslify": "^7.1.1"
+    "budo": "^11.6.4"
   }
 }
