@@ -1,6 +1,6 @@
 {
   "name": "vixel",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "A WebGL voxel path tracer",
   "main": "./lib/bundle.js",
   "scripts": {
