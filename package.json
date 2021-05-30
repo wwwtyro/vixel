@@ -5,7 +5,7 @@
   "main": "./lib/bundle.js",
   "scripts": {
     "start": "budo -d docs docs/index.js:docs/bundle.js --live -- -t glslify",
-    "build": "browserify index.js -o lib/bundle.js"
+    "build": "browserify index.js -s Vixel -o lib/bundle.js"
   },
   "keywords": [
     "webgl",
@@ -26,7 +26,7 @@
   "dependencies": {
     "gl-matrix": "^3.3.0",
     "regl": "^1.7.0",
-    "regl-atmosphere-envmap": "^1.0.4"
+    "regl-atmosphere-envmap": "^1.0.5"
   },
   "devDependencies": {
     "budo": "^11.6.4",
