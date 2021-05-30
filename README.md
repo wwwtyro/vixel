@@ -11,7 +11,7 @@ A WebGL path tracing voxel renderer built with [regl](https://github.com/regl-pr
 </p>
 
 ## Live demo
-There's a voxel scene editor you can play with [here](https://wwwtyro.github.io/vixel-editor/) that shows Vixel in action.
+There's a voxel scene editor you can view [here](https://wwwtyro.github.io/vixel/) that shows Vixel in action.
 
 ## Example
 
