@@ -4,8 +4,9 @@
   "description": "A WebGL voxel path tracer",
   "main": "./lib/bundle.js",
   "scripts": {
-    "start": "budo -d docs docs/index.js:docs/bundle.js --live -- -t glslify",
-    "build": "browserify index.js -s Vixel -o lib/bundle.js"
+    "start": "budo -d example example/index.js:bundle.js --live -- -t glslify",
+    "build": "browserify index.js -s Vixel -o lib/bundle.js",
+    "build-example": "browserify example/index.js -o docs/bundle.js && cp example/index.html docs/index.html"
   },
   "keywords": [
     "webgl",
