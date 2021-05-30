@@ -1,10 +1,11 @@
 {
   "name": "vixel",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A WebGL voxel path tracer",
-  "main": "index.js",
+  "main": "./lib/bundle.js",
   "scripts": {
-    "start": "budo -d docs docs/index.js:docs/bundle.js --live -- -t glslify"
+    "start": "budo -d docs docs/index.js:docs/bundle.js --live -- -t glslify",
+    "build": "browserify index.js -o lib/bundle.js"
   },
   "keywords": [
     "webgl",
