@@ -1,4 +1,4 @@
-const Vixel = require("..");
+const Vixel = require("../index");
 
 const canvas = document.createElement("canvas");
 document.body.appendChild(canvas);

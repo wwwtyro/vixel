@@ -26,7 +26,7 @@
   "dependencies": {
     "gl-matrix": "^3.3.0",
     "regl": "^1.7.0",
-    "regl-atmosphere-envmap": "^1.0.1"
+    "regl-atmosphere-envmap": "^1.0.2"
   },
   "devDependencies": {
     "budo": "^11.6.4",
